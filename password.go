@@ -25,6 +25,10 @@ func (c *Cli) GetPass(user string) string {
 					passwd = strings.TrimSpace(buf.String())
 				}
 			}
+		} else if source == "config" {
+			if cleartxt, ok := c.opts["password"].(string); ok {
+				passwd = cleartxt
+                        }
 		} else {
 			log.Warningf("Unknown password-source: %s", source)
 		}
@@ -67,6 +71,8 @@ func (c *Cli) SetPass(user, passwd string) error {
 					return fmt.Errorf("Failed to insert password: %s", out.String())
 				}
 			}
+		} else if source == "config" {
+			log.Debugf("processing %s", source)
 		} else {
 			return fmt.Errorf("Unknown password-source: %s", source)
 		}
